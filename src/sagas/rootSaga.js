@@ -1,9 +1,12 @@
 import { all } from 'redux-saga/effects';
 
-import { searchLocation } from './hotelListing.saga';
+import { searchLocation, sortHotels, onBedroomFilterChange, onPageChange } from './hotelListing.saga';
 
 export default function* rootSaga() {
     yield all([
-        searchLocation()
+        searchLocation(),
+        sortHotels(),
+        onBedroomFilterChange(),
+        onPageChange()
     ]);
  }

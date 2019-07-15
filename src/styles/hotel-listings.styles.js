@@ -24,6 +24,19 @@ const useStyles = makeStyles(theme => ({
   listingMedia: {
     height: 400,
   },
+  info: {
+    backgroundColor: theme.palette.primary.main,
+  },
+  icon: {
+    fontSize: 20,
+  },
+  error: {
+    backgroundColor: theme.palette.error.dark,
+  },
+  message: {
+    display: 'flex',
+    alignItems: 'center'
+  },
 }));
 
 export default useStyles;

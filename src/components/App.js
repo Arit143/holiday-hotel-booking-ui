@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -27,14 +27,20 @@ addLocaleData([...locale_en, ...locale_de]);
 
 const App = (props) => {
     const classes = useStyles();
-    const { language } = props;
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const { language, showFilters } = props;
+
+    const handleDrawerToggle = () => {
+        setMobileOpen(!mobileOpen);
+    }
+    
     return (
         <IntlProvider locale={language} messages={messages[language]}>
             <div className={classes.root}>
                 <CssBaseline />
                 <Router>
-                    <Header language={language}/>
-                    <LeftPane />
+                    <Header language={language} handleDrawerToggle={handleDrawerToggle}/>
+                    <LeftPane showFilters={showFilters} mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle}/>
                     {routes.map((route, idx) => <Route  key={idx} exact={route.exact} path={route.path} component={route.component} />)}
                 </Router>
             </div>
@@ -44,7 +50,8 @@ const App = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        language: state.app.language
+        language: state.app.language,
+        showFilters: state.hotelListing.showFilters
     }
 }
 

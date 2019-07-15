@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Hidden from '@material-ui/core/Hidden';
 import Drawer from '@material-ui/core/Drawer';
 import { useTheme, makeStyles } from '@material-ui/core/styles';
 
+import Filters from './../filters';
 import { DRAWER_WIDTH } from '../../constants/app.constants';
 
 const useStyles = makeStyles(theme =>({
@@ -18,6 +19,7 @@ const useStyles = makeStyles(theme =>({
 }));
 
 const LeftPane = (props) => {
+    const { showFilters, mobileOpen, handleDrawerToggle } = props;
     const classes = useStyles();
     const theme = useTheme();
 
@@ -27,8 +29,8 @@ const LeftPane = (props) => {
                 <Drawer
                     variant="temporary"
                     anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-                    //open={mobileOpen}
-                    //onClose={handleDrawerToggle}
+                    open={mobileOpen}
+                    onClose={handleDrawerToggle}
                     classes={{
                         paper: classes.drawerPaper,
                     }}
@@ -36,7 +38,7 @@ const LeftPane = (props) => {
                         keepMounted: true, // Better open performance on mobile.
                     }}
                 >
-                    {/* children */}
+                    {showFilters && <Filters />}
                 </Drawer>
             </Hidden>
             <Hidden xsDown implementation="css">
@@ -47,7 +49,7 @@ const LeftPane = (props) => {
                     variant="permanent"
                     open
                 >
-                    {/* children */}
+                    {showFilters && <Filters /> }
                 </Drawer>
             </Hidden>
         </nav>

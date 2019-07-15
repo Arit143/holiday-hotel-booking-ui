@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import isEmpty from 'lodash/isEmpty';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -38,7 +39,7 @@ const useStyles = makeStyles(theme =>({
 
 const Header = (props) => {
     const classes = useStyles();
-    const { language, actions: { onLanguageChange } } = props;
+    const { language, actions: { onLanguageChange }, handleDrawerToggle, pageTitle } = props;
 
     const handleLanguageChange = (e) => {
         onLanguageChange(e.target.value);
@@ -51,7 +52,7 @@ const Header = (props) => {
                     color="inherit"
                     aria-label="Open drawer"
                     edge="start"
-                    //onClick={handleDrawerToggle}
+                    onClick={handleDrawerToggle}
                     className={classes.menuButton}
                 >
                     <MenuIcon />
@@ -59,7 +60,9 @@ const Header = (props) => {
                 <Grid container>
                     <Grid item xs={7} className={classes.appBarTitle}>
                         <Typography variant="h6">
-                            <FormattedMessage id="appBar.pageTitle" />
+                        {isEmpty(pageTitle) ? <FormattedMessage id="appBar.pageTitle" /> :
+                            pageTitle
+                        }
                         </Typography>
                     </Grid>
                     <Grid item xs={5}>
@@ -90,6 +93,12 @@ const Header = (props) => {
     );
 };
 
+const mapStateToProps = state => {
+    return {
+        pageTitle: state.hotelListing.pageTitle
+    }
+}
+
 const mapDispatchToProps = (dispatch) => {
     return {
         actions: {
@@ -98,4 +107,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(memo(Header));
+export default connect(mapStateToProps, mapDispatchToProps)(memo(Header));

@@ -1,26 +1,49 @@
 import get from 'lodash/get';
+import isEmpty from 'lodash/isEmpty';
 import { actionTypes } from './../actions/action-types';
 
 const INITIAL_STATE = {
     searchTerm: '',
     listings: [],
-    pageTitle: ''
+    noResultFound: false,
+    pageTitle: '',
+    pageIndex: 0,
+    totalRecords: 0,
+    showFilters: false,
+    averagePriceFilter: undefined,
+    bedroomsFilter: undefined
 };
 
 const hotelListingReducer = (state = INITIAL_STATE, action = {}) => {
-    console.log(state);
     switch (action.type) {
         case actionTypes.search.SEARCH_HOTELS:
             return {
                 ...state,
                 searchTerm: action.payload
             }
+        case actionTypes.filters.ON_SORT: 
+            return {
+                ...state,
+                averagePriceFilter: action.payload
+            }
+        case actionTypes.filters.ON_BEDROOM_SELECT:
+            return {
+                ...state,
+                bedroomsFilter: action.payload
+            }
+        case actionTypes.search.ON_PAGE_CHANGE: 
+            return {
+                ...state,
+                pageIndex: action.payload
+            }
         case actionTypes.search.SEARCH_HOTELS_SUCCESS:
             return {
                 ...state,
-                searchTerm: action.payload.searchTerm,
+                noResultFound: isEmpty(action.payload.data),
+                pageTitle: get(action.payload, 'data.pageTitle', ''),
                 listings: get(action.payload, 'data.listings', []),
-                pageTitle: get(action.payload, 'data.pageTitle', '')
+                showFilters: get(action.payload, 'data.listings', []).length > 0 ,
+                totalRecords: get(action.payload, 'data.totalRecords', ''),
             }
         default:
             return { ...state };

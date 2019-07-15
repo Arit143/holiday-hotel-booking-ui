@@ -1,9 +1,11 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, memo } from 'react';
 import get from 'lodash/get';
 import map from 'lodash/map';
 import sample from 'lodash/sample';
 import { FormattedMessage } from 'react-intl';
 
+import InfoIcon from '@material-ui/icons/Info';
+import CloseIcon from '@material-ui/icons/Close';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
@@ -11,16 +13,35 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
 
-import { PARENT_APPLICATION_URI } from './../../constants/app.constants';
+import Pagination from './../common/Pagination';
+import { PARENT_APPLICATION_URI, PAGE_LIMIT } from './../../constants/app.constants';
 import useStyles  from './../../styles/hotel-listings.styles';
 
 const HotelListings = (props) => {
-    const { listings } = props;
+    const { listings, pageIndex, totalRecords, onPageChange, noResultFound } = props;
     const classes = useStyles();
+
+    if (noResultFound && listings.length === 0) {
+        return <Grid item xs={9}>
+            <SnackbarContent
+                autohideduration={6000}
+                aria-describedby="client-snackbar"
+                message={
+                    <span id="client-snackbar" className={classes.message}>
+                        <InfoIcon />
+                        <span style={{ marginLeft: '10px'}}>
+                            No results found
+                        </span>
+                    </span>
+                }
+            />
+        </Grid>
+    }
 
     return (
         <Fragment>
@@ -76,7 +97,7 @@ const HotelListings = (props) => {
                                             <FormattedMessage id="listings.averageNightlyPrice" />
                                         </Typography>
                                         <Typography variant="body2" color="textSecondary" component="p">
-                                            {`${get(value, 'averagePrice.currencyUnits')} ${get(value, 'averagePrice.value')}`}
+                                            {value.averagePrice !== null ? `${get(value, 'averagePrice.currencyUnits')} ${get(value, 'averagePrice.value')}` : 0}
                                         </Typography>
                                     </Grid>
                                 </Grid>
@@ -93,8 +114,14 @@ const HotelListings = (props) => {
                 )
             })
         }
+        {listings.length > 0 && <Pagination 
+            totalRecords={totalRecords} 
+            pageIndex={pageIndex} 
+            pageLimit={PAGE_LIMIT}
+            onPageChange={onPageChange}
+        />}
         </Fragment>
     );
 };
 
-export default HotelListings;
+export default memo(HotelListings);
