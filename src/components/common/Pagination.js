@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowLeft from '@material-ui/icons/ArrowLeft';
@@ -12,28 +12,21 @@ const useStyles = makeStyles(theme =>({
 
 const Pagination = (props) => {
     const { totalRecords, pageIndex, pageLimit, onPageChange } = props;
-    const [state, setState] = useState({ pageIndex });
     const classes = useStyles();
 
-    const statePageIndex = state.pageIndex;
-
-    useEffect(() => {
-        onPageChange(statePageIndex);
-    }, [statePageIndex])
-
     const setPageIndex = (pageIndex) => {
-        setState({ ...state, pageIndex });
+        onPageChange(pageIndex)
     }
 
-    const difference = (totalRecords - (statePageIndex * pageLimit));
-    const currentPageRecords = ((statePageIndex + 1) * pageLimit);
+    const difference = (totalRecords - (pageIndex * pageLimit));
+    const currentPageRecords = ((pageIndex + 1) * pageLimit);
     return (
         <div className={classes.root}>
-            {statePageIndex > 0 && <ArrowLeft onClick={() => setPageIndex(statePageIndex - 1)}/>}
+            {pageIndex > 0 && <ArrowLeft onClick={() => setPageIndex(pageIndex - 1)}/>}
             <div>
-                {`${(statePageIndex * pageLimit) + 1} - ${currentPageRecords > totalRecords ? totalRecords : currentPageRecords} of ${totalRecords} records`}
+                {`${(pageIndex * pageLimit) + 1} - ${currentPageRecords > totalRecords ? totalRecords : currentPageRecords} of ${totalRecords} records`}
             </div>
-            { (difference > pageLimit) && <ArrowRight onClick={() => setPageIndex(statePageIndex + 1)}/>}
+            { (difference > pageLimit) && <ArrowRight onClick={() => setPageIndex(pageIndex + 1)}/>}
         </div>
         
     );
