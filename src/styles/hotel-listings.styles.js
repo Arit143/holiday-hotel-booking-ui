@@ -17,7 +17,13 @@ const useStyles = makeStyles(theme => ({
   searchButton: {
     display: 'flex',
     'align-items': 'flex-end'
-  }
+  },
+  listingCard: {
+    maxWidth: '100%',
+  },
+  listingMedia: {
+    height: 400,
+  },
 }));
 
 export default useStyles;

@@ -1,7 +1,8 @@
 {
     "presets": [
       ["env", {"modules": false}],
-      "react"
+      "react", 
+      "stage-0"
     ],
     "plugins": [
       "react-hot-loader/babel",
@@ -12,7 +13,7 @@
         "presets": ["minify"]
       },
       "test": {
-        "presets": ["env", "react"]
+        "presets": ["env", "react", "stage-0"]
       }
     }
   }

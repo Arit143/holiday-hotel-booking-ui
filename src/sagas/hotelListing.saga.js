@@ -2,7 +2,6 @@ import { put, takeLatest, call, select, takeEvery } from 'redux-saga/effects';
 import axios from 'axios';
 
 import { actionTypes } from './../actions/action-types';
-import { searchTermSelector } from './../selectors/search.selectors';
 
 import { API_URL } from './../constants/app.constants';
 
@@ -12,8 +11,8 @@ import { API_URL } from './../constants/app.constants';
  * API to get the location listings for a search term
  */
 
-function searchTermApi(searchTerm) {
-    return axios.get(`${API_URL}/${searchTerm}/peers`);
+function searchTermListingApi(searchTerm) {
+    return axios.get(`${API_URL}/hotels?searchTerm=${searchTerm}`);
 }
 
 /**
@@ -21,20 +20,20 @@ function searchTermApi(searchTerm) {
  * @param {*} action 
  * Generator yield to put meta data success with payload
  * {payload: {
- *  ticker: peerName
- *  data: metaData
+ *  searchTerm: searchTerm for listings
+ *  data: listings data
  * }}
  */
-function* fetchMetaData(action) {    
+function* fetchListings(action) {    
     try {
-        const searchTermResponse = yield call(fetchMetaDataApi, action.payload);
-        yield put({ type: `@search/${actionTypes.search.GET_META_DATA_SUCCESS}`, payload: {
-            ticker: action.payload,
-            data: searchTermResponse.data 
+        const searchTermResponse = yield call(searchTermListingApi, action.payload);
+        yield put({ type: actionTypes.search.SEARCH_HOTELS_SUCCESS, payload: {
+            searchTerm: action.payload,
+            data: searchTermResponse.data.data
         }});
     } catch (err) {
-        yield put({ type: `@search/${actionTypes.search.GET_META_DATA_FAILURE}`, payload: {
-            ticker: action.payload
+        yield put({ type: actionTypes.search.SEARCH_HOTELS_FAILURE, payload: {
+            searchTerm: action.payload
         } });
     }
 }
@@ -44,5 +43,5 @@ function* fetchMetaData(action) {
  */
 
 export function* searchLocation() {
-    yield takeLatest(`@search/${actionTypes.search.GET_SEARCH_PEERS}`, fetchListings)
+    yield takeLatest(actionTypes.search.SEARCH_HOTELS, fetchListings)
 }

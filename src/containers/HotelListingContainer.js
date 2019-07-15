@@ -1,12 +1,17 @@
 import React, { memo } from 'react';
+import { connect } from 'react-redux';
+
+import { listingState } from './../selectors/hotelListing.selector';
+import { onSearch } from './../actions/hotelListings.actions';
 
 import Search from './../components/search';
+import HotelListings from './../components/hotel-listings';
 import { PageContext } from './../context/PageContext';
 
 import useStyles from '../styles/hotel-listings.styles';
 
 const HotelListingContainer = (props) => {
-    const { history } = props;
+    const { history, actions: { onSearch }, listings } = props;
     const classes = useStyles();
 
     const pageValues = {
@@ -17,10 +22,25 @@ const HotelListingContainer = (props) => {
         <PageContext.Provider value={pageValues}>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-                <Search />
+                <Search onSearch={onSearch}/>
+                <HotelListings listings={listings} />
             </main>
         </PageContext.Provider>
     )
+};
+
+const mapStateToProps = state => {
+    return {
+        listings: listingState(state)
+    }
 }
 
-export default memo(HotelListingContainer);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        actions: {
+            onSearch: (searchTerm) => dispatch(onSearch(searchTerm))
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(memo(HotelListingContainer));

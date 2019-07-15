@@ -1,4 +1,7 @@
 import React, { memo, useState, useContext } from 'react';
+import { FormattedMessage } from 'react-intl';
+import isEmpty from 'lodash/isEmpty';
+
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 
@@ -7,7 +10,8 @@ import { PageContext } from '../../context/PageContext';
 
 import useStyles from '../../styles/hotel-listings.styles';
 
-const Search = () => {
+const Search = (props) => {
+    const { onSearch } = props;
     const [state, setState] = useState({ location: '' });
     const classes = useStyles();
     const { redirect } = useContext(PageContext);
@@ -16,11 +20,19 @@ const Search = () => {
         setState({ ...state, location: e.target.value });
     }
 
-    const onSearch = () => {
+    const onSearchClick = () => {
+        const { location } = state;
+
+        if (isEmpty(location)) {
+            return;
+        }
+
         redirect({
             path: '/',
-            search: `?searchTerm=${state.location}`
+            search: `?searchTerm=${location}`
         })
+
+        onSearch(location);
     }
 
     return (
@@ -36,8 +48,8 @@ const Search = () => {
                 />
             </Grid>
             <Grid item xs={3} className={classes.searchButton}>
-                <Button variant="contained" color="primary" onClick={onSearch}>
-                    Search
+                <Button variant="contained" color="primary" onClick={onSearchClick}>
+                    <FormattedMessage id="listings.search" />
                 </Button>
             </Grid>
         </Grid>

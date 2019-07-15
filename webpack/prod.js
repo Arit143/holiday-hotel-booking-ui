@@ -7,7 +7,7 @@ const commonConfig = require('./common');
 
 module.exports = merge(commonConfig, {
   mode: 'production',
-  entry: './index.js',
+  entry: ['babel-polyfill', './index.js'],
   output: {
     filename: 'js/[name].[chunkhash].js',
     path: resolve(__dirname, '../dist'),

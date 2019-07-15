@@ -1,64 +1,51 @@
-import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { connect } from 'react-redux';
+
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MailIcon from '@material-ui/icons/Mail';
-import Typography from '@material-ui/core/Typography';
+
+import { IntlProvider, addLocaleData } from 'react-intl';
+import locale_en from 'react-intl/locale-data/en';
+import locale_de from 'react-intl/locale-data/de';
 
 import Header from './common/Header';
 import LeftPane from './common/LeftPane';
 
-import { routes } from './../routes';
+import messages_de from "./../translations/de.json";
+import messages_en from "./../translations/en.json";
 
+import { routes } from './../routes';
 import useStyles from './../styles/hotel-listings.styles';
 
+const messages = {
+    'de': messages_de,
+    'en': messages_en
+};
 
-export default function App(props) {
-  const classes = useStyles();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+addLocaleData([...locale_en, ...locale_de]);
 
-  function handleDrawerToggle() {
-    setMobileOpen(!mobileOpen);
-  }
-
-  const drawer = (
-    <div>
-      <div className={classes.toolbar} />
-      <Divider />
-      <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );
-
-  return (
-    <div className={classes.root}>
-        <CssBaseline />
-        <Router>
-            <Header />
-            <LeftPane />
-            {routes.map((route, idx) => <Route  key={idx} exact={route.exact} path={route.path} component={route.component} />)}
-        </Router>
-    </div>
-  );
+const App = (props) => {
+    const classes = useStyles();
+    const { language } = props;
+    return (
+        <IntlProvider locale={language} messages={messages[language]}>
+            <div className={classes.root}>
+                <CssBaseline />
+                <Router>
+                    <Header language={language}/>
+                    <LeftPane />
+                    {routes.map((route, idx) => <Route  key={idx} exact={route.exact} path={route.path} component={route.component} />)}
+                </Router>
+            </div>
+        </IntlProvider>
+    );
 }
+
+const mapStateToProps = (state) => {
+    return {
+        language: state.app.language
+    }
+}
+
+export default connect(mapStateToProps, null)(memo(App));

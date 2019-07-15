@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { memo } from 'react';
+import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { onLanguageChange } from './../../actions/app.actions';
 import { DRAWER_WIDTH } from '../../constants/app.constants';
 
 const useStyles = makeStyles(theme =>({
@@ -21,10 +27,22 @@ const useStyles = makeStyles(theme =>({
           display: 'none',
         },
     },
+    appBarTitle: {
+        display: 'flex',
+        'align-items': 'center'
+    },
+    menu: {
+        width: '100%'
+    }
 }));
 
 const Header = (props) => {
     const classes = useStyles();
+    const { language, actions: { onLanguageChange } } = props;
+
+    const handleLanguageChange = (e) => {
+        onLanguageChange(e.target.value);
+    }
 
     return (
         <AppBar position="fixed" className={classes.appBar}>
@@ -38,12 +56,46 @@ const Header = (props) => {
                 >
                     <MenuIcon />
                 </IconButton>
-                <Typography variant="h6" noWrap>
-                    Responsive drawer
-                </Typography>
+                <Grid container>
+                    <Grid item xs={7} className={classes.appBarTitle}>
+                        <Typography variant="h6">
+                            <FormattedMessage id="appBar.pageTitle" />
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={5}>
+                    <TextField
+                        id="language-id"
+                        select
+                        value={language}
+                        onChange={handleLanguageChange}
+                        SelectProps={{
+                            native: true,
+                            MenuProps: {
+                                className: classes.menu,
+                            },
+                        }}
+                        margin="normal"
+                    >
+                        <option key={'en'} value={'en'}>
+                            English
+                        </option>
+                        <option key={'de'} value={'de'}>
+                            German
+                        </option>
+                    </TextField>
+                    </Grid>
+                </Grid>
             </Toolbar>
         </AppBar>
     );
 };
 
-export default Header;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        actions: {
+            onLanguageChange: (language) => dispatch(onLanguageChange(language))
+        }
+    }
+}
+
+export default connect(null, mapDispatchToProps)(memo(Header));
