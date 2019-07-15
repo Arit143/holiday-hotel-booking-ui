@@ -11,11 +11,8 @@ const appReducer = (state = INITIAL_STATE, action = {}) => {
                 ...state,
                 language: action.payload
             }
-        /**
-         * Return default state
-         */
         default:
-            return INITIAL_STATE;
+            return { ...state };
     }
 }
 

@@ -8,6 +8,7 @@ const INITIAL_STATE = {
 };
 
 const hotelListingReducer = (state = INITIAL_STATE, action = {}) => {
+    console.log(state);
     switch (action.type) {
         case actionTypes.search.SEARCH_HOTELS:
             return {
@@ -21,11 +22,8 @@ const hotelListingReducer = (state = INITIAL_STATE, action = {}) => {
                 listings: get(action.payload, 'data.listings', []),
                 pageTitle: get(action.payload, 'data.pageTitle', '')
             }
-        /**
-         * Return default state
-         */
         default:
-            return INITIAL_STATE;
+            return { ...state };
     }
 }
 
