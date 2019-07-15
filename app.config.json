@@ -1,0 +1,10 @@
+{
+    "apps" : [
+      {
+        "name": "holiday-hotel-booking-ui",
+        "script": "npx",
+        "interpreter": "none",
+        "args": "serve -p 8080 -s build"
+      }
+    ]
+  }

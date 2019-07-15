@@ -1,7 +1,6 @@
 const merge = require('webpack-merge');
 const { resolve } = require('path');
 const webpack = require('webpack');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const commonConfig = require('./common');
 
@@ -10,11 +9,10 @@ module.exports = merge(commonConfig, {
   entry: ['babel-polyfill', './index.js'],
   output: {
     filename: 'js/[name].[chunkhash].js',
-    path: resolve(__dirname, '../dist'),
+    path: resolve(__dirname, '../build'),
     publicPath: '/',
   },
   plugins: [
-    new CleanWebpackPlugin(['dist']),
     new UglifyJSPlugin({
         test: /\.js$/i,
         parallel: true,
