@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+
 import Hidden from '@material-ui/core/Hidden';
 import Drawer from '@material-ui/core/Drawer';
 import { useTheme, makeStyles } from '@material-ui/core/styles';
@@ -18,6 +20,11 @@ const useStyles = makeStyles(theme =>({
     }
 }));
 
+/**
+ * 
+ * @param {*} props 
+ * Filter panel once the search term has results
+ */
 const LeftPane = (props) => {
     const { showFilters, mobileOpen, handleDrawerToggle } = props;
     const classes = useStyles();
@@ -54,6 +61,12 @@ const LeftPane = (props) => {
             </Hidden>
         </nav>
     );
+};
+
+LeftPane.propTypes = {
+    showFilters: PropTypes.bool,
+    mobileOpen: PropTypes.bool,
+    handleDrawerToggle: PropTypes.func
 };
 
 export default LeftPane;

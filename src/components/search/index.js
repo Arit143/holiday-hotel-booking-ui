@@ -10,6 +10,12 @@ import { PageContext } from '../../context/PageContext';
 
 import useStyles from '../../styles/hotel-listings.styles';
 
+/**
+ * 
+ * @param {*} props 
+ * Component to type in search Term and find results
+ */
+
 const Search = (props) => {
     const { onSearch } = props;
     const [state, setState] = useState({ location: '' });

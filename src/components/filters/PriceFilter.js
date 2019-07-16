@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 
@@ -10,6 +11,11 @@ import Grid from '@material-ui/core/Grid';
 
 import { onSort } from '../../actions/filters.actions';
 
+/**
+ * 
+ * @param {*} props 
+ * Component to support the price filter
+ */
 const PriceFilter = (props) => {
     const { actions: { onSort } } = props;
     return (
@@ -52,6 +58,12 @@ const mapDispatchToProps = (dispatch) => {
             onSort: (order) => dispatch(onSort(order))
         }
     }
-}
+};
+
+PriceFilter.propTypes = {
+    actions: PropTypes.shape({
+        onSort: PropTypes.func
+    })
+};
 
 export default connect(null, mapDispatchToProps)(PriceFilter);

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowLeft from '@material-ui/icons/ArrowLeft';
@@ -9,6 +10,12 @@ const useStyles = makeStyles(theme =>({
         display: 'inline-flex'
     }
 }));
+
+/**
+ * 
+ * @param {*} props 
+ * Component to handle pagination of the listings
+ */
 
 const Pagination = (props) => {
     const { totalRecords, pageIndex, pageLimit, onPageChange } = props;
@@ -31,5 +38,12 @@ const Pagination = (props) => {
         
     );
 }
+
+Pagination.propTypes = {
+    totalRecords: PropTypes.number,
+    pageIndex: PropTypes.number,
+    pageLimit: PropTypes.number,
+    onPageChange: PropTypes.func
+};
 
 export default Pagination;

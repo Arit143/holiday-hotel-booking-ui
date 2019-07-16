@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import map from 'lodash/map';
@@ -16,6 +17,11 @@ import Grid from '@material-ui/core/Grid';
 import { onBedroomFilterChange } from '../../actions/filters.actions';
 import { createBedroomFilters, bedroomsFilterState } from '../../selectors/hotelListing.selector';
 
+/**
+ * 
+ * @param {*} props 
+ * Filter to support the filtering of the bedrooms bases on the number of bedrooms returned by the listings
+ */
 const BedroomFilter = (props) => {
     const { bedrooms, actions: { onBedroomFilterChange }, bedroomsFilterValue } = props;
 
@@ -67,7 +73,7 @@ const mapStateToProps = state => {
         bedrooms: createBedroomFilters(state),
         bedroomsFilterValue: bedroomsFilterState(state)
     }
-}
+};
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -75,6 +81,14 @@ const mapDispatchToProps = (dispatch) => {
             onBedroomFilterChange: (bedroom) => dispatch(onBedroomFilterChange(bedroom))
         }
     }
+};
+
+BedroomFilter.propTypes = {
+    bedrooms: PropTypes.array,
+    bedroomsFilterValue: PropTypes.string,
+    actions: PropTypes.shape({
+        onBedroomFilterChange: PropTypes.func
+    })
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BedroomFilter);

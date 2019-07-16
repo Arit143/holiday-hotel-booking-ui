@@ -1,4 +1,5 @@
 import React, { Fragment, memo } from 'react';
+import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import map from 'lodash/map';
 import sample from 'lodash/sample';
@@ -22,6 +23,14 @@ import Pagination from './../common/Pagination';
 import { PARENT_APPLICATION_URI, PAGE_LIMIT } from './../../constants/app.constants';
 import useStyles  from './../../styles/hotel-listings.styles';
 
+/**
+ * 
+ * @param {*} props 
+ * Main Component to support all the hotels listings
+ * Show No results found if the searchTerm doesn't match
+ * Show the listings if searchTerm matches
+ * Handle pagination
+ */
 const HotelListings = (props) => {
     const { listings, pageIndex, totalRecords, onPageChange, noResultFound } = props;
     const classes = useStyles();
@@ -122,6 +131,14 @@ const HotelListings = (props) => {
         />}
         </Fragment>
     );
+};
+
+HotelListings.propTypes = {
+    listings: PropTypes.array,
+    pageIndex: PropTypes.number,
+    totalRecords: PropTypes.number,
+    onPageChange: PropTypes.func,
+    noResultFound: PropTypes.bool
 };
 
 export default memo(HotelListings);

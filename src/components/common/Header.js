@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
@@ -15,6 +16,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import { onLanguageChange } from './../../actions/app.actions';
 import { DRAWER_WIDTH } from '../../constants/app.constants';
 
+/**
+ * Styles for Header Component
+ */
 const useStyles = makeStyles(theme =>({
     appBar: {
         marginLeft: DRAWER_WIDTH,
@@ -37,6 +41,11 @@ const useStyles = makeStyles(theme =>({
     }
 }));
 
+/**
+ * 
+ * @param {*} props 
+ * Header component which has App title and language change dropdown
+ */
 const Header = (props) => {
     const classes = useStyles();
     const { language, actions: { onLanguageChange }, handleDrawerToggle, pageTitle } = props;
@@ -97,7 +106,7 @@ const mapStateToProps = state => {
     return {
         pageTitle: state.hotelListing.pageTitle
     }
-}
+};
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -105,6 +114,15 @@ const mapDispatchToProps = (dispatch) => {
             onLanguageChange: (language) => dispatch(onLanguageChange(language))
         }
     }
+};
+
+Header.propTypes = {
+    language: PropTypes.string.isRequired,
+    actions: PropTypes.shape({
+        onLanguageChange: PropTypes.func
+    }),
+    handleDrawerToggle: PropTypes.func,
+    pageTitle: PropTypes.string
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(memo(Header));
