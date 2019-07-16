@@ -45,6 +45,18 @@ Fire up with `npm start` to start the server navigate to http://localhost:8080 t
 
 The app is running in EC2 instance. http://54.149.213.214:4000/. 
 
+## Bonus Points
+
+1. Build tools / task runners such as webpack are used
+
+2. Application is deployed to cloud instances - http://54.149.213.214:4000/
+
+3. Internalization is easily supported
+
+4. Proper error handling
+
+5. High speed page rendering
+
 ## Improvements
 1. The app should be covered with test cases. Test cases are missing. (react-testing-library)
 
